@@ -52,7 +52,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
         public void bindItem(final Item item) {
             mNameView.setText(item.getName());
-            mPriceView.setText(String.valueOf(item.getPrice()));
+            mPriceView.setText(
+                    mPriceView.getContext().getResources().getString(R.string.price_with_currency,
+                    String.valueOf(item.getPrice())));
         }
     }
 }
