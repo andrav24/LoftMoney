@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.tabs.TabLayout;
+
 public class BudgetFragment extends Fragment {
 
     ItemsAdapter mAdapter;
