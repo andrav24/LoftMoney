@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
 
 public class BudgetFragment extends Fragment {
 
@@ -39,7 +38,7 @@ public class BudgetFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.budget_item_list);
 
-        mAdapter = new ItemsAdapter();
+        mAdapter = new ItemsAdapter(getArguments()); // передаем bundle в recyclerViewAdapter
         recyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -72,5 +71,11 @@ public class BudgetFragment extends Fragment {
         if (requestCode == LOFT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             mAdapter.addItem(new Item(data.getStringExtra("name"), price));
         }
+    }
+
+    public static BudgetFragment newInstance(Bundle args) {
+        BudgetFragment fragment = new BudgetFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

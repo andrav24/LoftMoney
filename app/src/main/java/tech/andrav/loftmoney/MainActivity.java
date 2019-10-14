@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     static class BudgetPagerAdapter extends FragmentPagerAdapter {
 
+        static final String COLOR_ID = "colorId";
+
         public BudgetPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);
         }
@@ -44,7 +46,18 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return new BudgetFragment();
+            Bundle bundle = new Bundle();
+            switch (position){
+                case 0:
+                    bundle.putInt(COLOR_ID, R.color.dark_sky_blue);
+                    break;
+                case 1:
+                    bundle.putInt(COLOR_ID, R.color.apple_green);
+                    break;
+                default:
+                    return null;
+            }
+            return BudgetFragment.newInstance(bundle);
         }
 
         @Override

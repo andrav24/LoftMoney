@@ -1,10 +1,13 @@
 package tech.andrav.loftmoney;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
@@ -15,12 +18,17 @@ import java.util.List;
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     private List<Item> mItemsList = new ArrayList<>();
+    private Bundle bundle;
+
+    public ItemsAdapter(Bundle bundle) {
+        this.bundle = bundle;
+    }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = View.inflate(parent.getContext(), R.layout.item_view, null);
-        return new ItemViewHolder(itemView);
+        return new ItemViewHolder(itemView, bundle);
     }
 
     @Override
@@ -44,10 +52,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         private TextView mNameView;
         private TextView mPriceView;
 
-        public ItemViewHolder(@NonNull View itemView) {
+        public ItemViewHolder(@NonNull View itemView, Bundle bundle) {
             super(itemView);
             mNameView = itemView.findViewById(R.id.name_view);
             mPriceView = itemView.findViewById(R.id.price_view);
+            final Context context = mPriceView.getContext();
+            mPriceView.setTextColor(ContextCompat.getColor(
+                    context,
+                    bundle.getInt(MainActivity.BudgetPagerAdapter.COLOR_ID)));
         }
 
         public void bindItem(final Item item) {
