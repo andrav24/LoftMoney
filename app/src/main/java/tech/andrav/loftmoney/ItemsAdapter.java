@@ -21,6 +21,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     private Bundle bundle;
 
     public ItemsAdapter(Bundle bundle) {
+
         this.bundle = bundle;
     }
 
