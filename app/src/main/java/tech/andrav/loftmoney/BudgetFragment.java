@@ -82,7 +82,7 @@ public class BudgetFragment extends Fragment {
 
     private void loadItems(){
         final String token = PreferenceManager.getDefaultSharedPreferences(getContext()).getString(MainActivity.TOKEN, "");
-        Call<List<Item>> items = mApi.getItems(getArguments().getString(MainActivity.BudgetPagerAdapter.TYPE), token);
+        Call<List<Item>> items = mApi.getItems(getArguments().getString(MainActivity.TYPE), token);
         items.enqueue(new Callback<List<Item>>() {
             @Override
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
@@ -124,7 +124,7 @@ public class BudgetFragment extends Fragment {
             Call<Status> call = mApi.addItem(new AddItemRequest(
                     price,
                     name,
-                    getArguments().getString(MainActivity.BudgetPagerAdapter.TYPE)), token);
+                    getArguments().getString(MainActivity.TYPE)), token);
 
             // the data is queued and sent to the server
             // Callback<Status> - to read the response from the server

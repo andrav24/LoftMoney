@@ -20,13 +20,17 @@ public class AddItemActivity extends AppCompatActivity {
     private Button mAddButton;
     private String mName;
     private String mPrice;
+    private int mColorId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        mColorId = getIntent().getIntExtra(MainActivity.COLOR_ID, R.color.design_default_color_on_secondary);
+
         mNameEditText = findViewById(R.id.name_edittext);
+        mNameEditText.setTextColor(getResources().getColor(mColorId));
         mNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(
@@ -48,6 +52,7 @@ public class AddItemActivity extends AppCompatActivity {
         });
 
         mPriceEditText = findViewById(R.id.price_edittext);
+        mPriceEditText.setTextColor(getResources().getColor(mColorId));
         mPriceEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(

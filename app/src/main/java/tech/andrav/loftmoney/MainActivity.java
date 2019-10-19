@@ -28,6 +28,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Api mApi;
     public static final int LOFT_REQUEST_CODE = 100;
+    public static final String COLOR_ID = "colorId";
+    public static final String TYPE = "fragmentType";
+    public static final String EXPENSE = "expense";
+    public static final String INCOME = "income";
+
     public static final String TOKEN = "token";
     private static final String USER_ID = "andrav";
 
@@ -54,8 +59,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final int activeFragmentIndex = viewPager.getCurrentItem();
                 Fragment activeFragment = getSupportFragmentManager().getFragments().get(activeFragmentIndex);
-                activeFragment.startActivityForResult(new Intent(
-                    MainActivity.this, AddItemActivity.class), LOFT_REQUEST_CODE);
+                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+                switch (activeFragmentIndex) {
+                    case 0:
+                        intent.putExtra(COLOR_ID, R.color.dark_sky_blue);
+                        break;
+                    case 1:
+                        intent.putExtra(COLOR_ID, R.color.apple_green);
+                        break;
+                }
+
+                activeFragment.startActivityForResult(intent, LOFT_REQUEST_CODE);
             }
         });
 
@@ -86,10 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
     static class BudgetPagerAdapter extends FragmentPagerAdapter {
 
-        static final String COLOR_ID = "colorId";
-        static final String TYPE = "fragmentType";
-        static final String EXPENSE = "expense";
-        static final String INCOME = "income";
 
         public BudgetPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);

@@ -65,7 +65,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             final Context context = mPriceView.getContext();
             mPriceView.setTextColor(ContextCompat.getColor(
                     context,
-                    bundle.getInt(MainActivity.BudgetPagerAdapter.COLOR_ID)));
+                    bundle.getInt(MainActivity.COLOR_ID)));
         }
 
         public void bindItem(final Item item) {
