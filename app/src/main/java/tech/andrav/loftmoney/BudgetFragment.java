@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.List;
 
@@ -27,9 +28,8 @@ public class BudgetFragment extends Fragment {
 
     private ItemsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private Api mApi;
-
-
 
 
     public static BudgetFragment newInstance(Bundle args) {
@@ -60,6 +60,14 @@ public class BudgetFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
                 DividerItemDecoration.VERTICAL));
 
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadItems();
+            }
+        });
+
         /*  adding data from code
         mAdapter.addItem(new Item("Молоко", 50));
         mAdapter.addItem(new Item("Сыр", 150));
@@ -78,6 +86,8 @@ public class BudgetFragment extends Fragment {
         items.enqueue(new Callback<List<Item>>() {
             @Override
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
+                mAdapter.clearItems();
+                mSwipeRefreshLayout.setRefreshing(false);
                 List<Item> items = response.body();
                 for (Item item : items) {
                     mAdapter.addItem(item);
@@ -86,7 +96,7 @@ public class BudgetFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Item>> call, Throwable t) {
-
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }

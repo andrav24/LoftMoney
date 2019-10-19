@@ -48,6 +48,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         notifyDataSetChanged();
     }
 
+    public void clearItems() {
+        mItemsList.clear();
+        notifyDataSetChanged();
+    }
+
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mNameView;
