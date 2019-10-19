@@ -29,7 +29,7 @@ public class BudgetFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private Api mApi;
 
-    private static final int LOFT_REQUEST_CODE = 100;
+
 
 
     public static BudgetFragment newInstance(Bundle args) {
@@ -41,8 +41,10 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // получаем ссылку на объект Api
+        // get a reference to the Api object
         mApi = ((LoftApp) getActivity().getApplication()).getApi();
+        mAdapter = new ItemsAdapter(getArguments()); // pass bundle to recyclerViewAdapter
+        mLayoutManager = new LinearLayoutManager(getActivity());
         loadItems();
     }
 
@@ -52,25 +54,13 @@ public class BudgetFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_budget, null);
 
-        Button addItemButton = view.findViewById(R.id.add_item_button);
-        addItemButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(getActivity(), AddItemActivity.class), LOFT_REQUEST_CODE);
-            }
-        });
-
         RecyclerView recyclerView = view.findViewById(R.id.budget_item_list);
-
-        mAdapter = new ItemsAdapter(getArguments()); // передаем bundle в recyclerViewAdapter
         recyclerView.setAdapter(mAdapter);
-        mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
-
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(),
                 DividerItemDecoration.VERTICAL));
 
-        /*  добавление данных из кода
+        /*  adding data from code
         mAdapter.addItem(new Item("Молоко", 50));
         mAdapter.addItem(new Item("Сыр", 150));
         mAdapter.addItem(new Item("Ветчина", 150));
@@ -114,20 +104,20 @@ public class BudgetFragment extends Fragment {
 
         final int realPrice = price;
 
-        if (requestCode == LOFT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == MainActivity.LOFT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 
             final String name = data.getStringExtra("name");
 
             final String token = PreferenceManager.getDefaultSharedPreferences(getContext()).getString(MainActivity.TOKEN, "");
 
-            // вызов этого метода не отправляет данные на сервер
+            // calling this method does not send data to the server
             Call<Status> call = mApi.addItem(new AddItemRequest(
                     price,
                     name,
                     getArguments().getString(MainActivity.BudgetPagerAdapter.TYPE)), token);
 
-            // в этом методе данные ставятся в очередь и отправляются на сервер
-            // Callback<Status> - для чтения ответа от сервера
+            // the data is queued and sent to the server
+            // Callback<Status> - to read the response from the server
             call.enqueue(new Callback<Status>() {
                 @Override
                 public void onResponse(Call<Status> call, Response<Status> response) {
