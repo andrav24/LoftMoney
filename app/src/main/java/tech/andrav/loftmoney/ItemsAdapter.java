@@ -48,6 +48,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         notifyDataSetChanged();
     }
 
+    public void clearItems() {
+        mItemsList.clear();
+        notifyDataSetChanged();
+    }
+
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mNameView;
@@ -60,7 +65,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             final Context context = mPriceView.getContext();
             mPriceView.setTextColor(ContextCompat.getColor(
                     context,
-                    bundle.getInt(MainActivity.BudgetPagerAdapter.COLOR_ID)));
+                    bundle.getInt(MainActivity.COLOR_ID)));
         }
 
         public void bindItem(final Item item) {
