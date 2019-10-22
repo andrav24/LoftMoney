@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 activeFragment.startActivityForResult(intent, LOFT_REQUEST_CODE);
+                overridePendingTransition(R.anim.from_right_in, R.anim.from_left_out);
             }
         });
 

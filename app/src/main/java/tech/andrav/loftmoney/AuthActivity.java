@@ -35,6 +35,7 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();   // destroyed activity from memory
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 startActivity(new Intent(AuthActivity.this, MainActivity.class));
             }
         });
