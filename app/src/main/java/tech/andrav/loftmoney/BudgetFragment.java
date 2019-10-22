@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -80,7 +79,7 @@ public class BudgetFragment extends Fragment {
         return view;
     }
 
-    private void loadItems(){
+    public void loadItems(){
         final String token = PreferenceManager.getDefaultSharedPreferences(getContext()).getString(MainActivity.TOKEN, "");
         Call<List<Item>> items = mApi.getItems(getArguments().getString(MainActivity.TYPE), token);
         items.enqueue(new Callback<List<Item>>() {
@@ -105,16 +104,18 @@ public class BudgetFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        int price;
-        try {
-            price = Integer.parseInt(data.getStringExtra("price"));
-        } catch (NumberFormatException e) {
-            price = 0;
-        }
 
-        final int realPrice = price;
 
         if (requestCode == MainActivity.LOFT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+
+            int price;
+            try {
+                price = Integer.parseInt(data.getStringExtra("price"));
+            } catch (NumberFormatException e) {
+                price = 0;
+            }
+
+            final int realPrice = price;
 
             final String name = data.getStringExtra("name");
 
