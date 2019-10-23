@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,15 +25,13 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Api mApi;
+
     public static final int LOFT_REQUEST_CODE = 100;
     public static final String COLOR_ID = "colorId";
     public static final String TYPE = "fragmentType";
     public static final String EXPENSE = "expense";
     public static final String INCOME = "income";
-
     public static final String TOKEN = "token";
-    private static final String USER_ID = "andrav";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,31 +67,14 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 activeFragment.startActivityForResult(intent, LOFT_REQUEST_CODE);
+                overridePendingTransition(R.anim.from_right_in, R.anim.from_left_out);
             }
         });
 
-        mApi = ((LoftApp) getApplication()).getApi();
-
-        final String token = PreferenceManager.getDefaultSharedPreferences(this).getString(TOKEN, "");
-        if (TextUtils.isEmpty(token)) {
-
-            Call<Status> auth = mApi.auth(USER_ID);
-            auth.enqueue(new Callback<Status>() {
-                @Override
-                public void onResponse(Call<Status> call, Response<Status> response) {
-                    SharedPreferences.Editor editor =
-                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit();
-
-                    editor.putString(TOKEN, response.body().getToken());
-                    editor.apply();
-
-                }
-
-                @Override
-                public void onFailure(Call<Status> call, Throwable t) {
-
-                }
-            });
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof BudgetFragment) {
+                ((BudgetFragment)fragment).loadItems();
+            }
         }
     }
 
