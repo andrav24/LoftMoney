@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,12 +26,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class BudgetFragment extends Fragment {
+public class BudgetFragment extends Fragment implements ItemsAdapterListener, ActionMode.Callback {
 
     private ItemsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Api mApi;
+    private ActionMode mActionMode;
 
 
     public static BudgetFragment newInstance(Bundle args) {
@@ -43,6 +47,7 @@ public class BudgetFragment extends Fragment {
         // get a reference to the Api object
         mApi = ((LoftApp) getActivity().getApplication()).getApi();
         mAdapter = new ItemsAdapter(getArguments()); // pass bundle to recyclerViewAdapter
+        mAdapter.setListener(this);
         mLayoutManager = new LinearLayoutManager(getActivity());
         loadItems();
     }
@@ -144,5 +149,46 @@ public class BudgetFragment extends Fragment {
                 }
             });
         }
+    }
+
+    @Override
+    public void onItemClick(Item item, int position) {
+        mAdapter.clearItem(position);
+        if (mActionMode != null) {
+            mActionMode.setTitle(getString(R.string.selected, String.valueOf(mAdapter.getSelectedSize())));
+        }
+    }
+
+    @Override
+    public void onItemLongClick(Item item, int position) {
+        if (mActionMode == null) {
+            getActivity().startActionMode(this);
+        }
+        mAdapter.toggleItem(position);
+        if (mActionMode != null) {
+            mActionMode.setTitle(getString(R.string.selected, String.valueOf(mAdapter.getSelectedSize())));
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(final ActionMode mode, final Menu menu) {
+        mActionMode = mode;
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(final ActionMode mode, final Menu menu) {
+        return true;
+    }
+
+    @Override
+    public boolean onActionItemClicked(final ActionMode mode, final MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public void onDestroyActionMode(final ActionMode mode) {
+        mActionMode = null;
+        mAdapter.clearSelections();
     }
 }

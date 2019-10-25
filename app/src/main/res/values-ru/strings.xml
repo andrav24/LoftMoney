@@ -9,4 +9,5 @@
     <string name="incomes">Доходы</string>
     <string name="activity_main_toolbar_title">Учет Бюджета</string>
     <string name="enter">Войти</string>
+    <string name="selected">Выделено: %1$s</string>
 </resources>

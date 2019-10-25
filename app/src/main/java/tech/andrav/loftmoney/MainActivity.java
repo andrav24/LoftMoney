@@ -2,25 +2,21 @@ package tech.andrav.loftmoney;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
+import android.view.ActionMode;
 import android.view.View;
 
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,22 +29,26 @@ public class MainActivity extends AppCompatActivity {
     public static final String INCOME = "income";
     public static final String TOKEN = "token";
 
+    private TabLayout mTabLayout;
+    private Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        mToolbar = findViewById(R.id.toolbar);
+        mTabLayout = findViewById(R.id.tabs);
         final ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(new BudgetPagerAdapter(
                 getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
 
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setText(R.string.expences);
-        tabLayout.getTabAt(1).setText(R.string.incomes);
+        mTabLayout.setupWithViewPager(viewPager);
+        mTabLayout.getTabAt(0).setText(R.string.expences);
+        mTabLayout.getTabAt(1).setText(R.string.incomes);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +78,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    static class BudgetPagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        super.onActionModeStarted(mode);
+        mTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_grey_blue));
+        mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_grey_blue));
+    }
 
+    @Override
+    public void onActionModeFinished(ActionMode mode) {
+        super.onActionModeFinished(mode);
+        mTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    }
+
+    static class BudgetPagerAdapter extends FragmentPagerAdapter {
 
         public BudgetPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);
