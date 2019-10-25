@@ -10,4 +10,6 @@
     <string name="activity_main_toolbar_title">Budget Accounting</string>
     <string name="enter">Enter</string>
     <string name="selected">Selected: %1$s</string>
+    <string name="remove">Remove</string>
+    <string name="confirmation">Do you really want to delete selected items?</string>
 </resources>

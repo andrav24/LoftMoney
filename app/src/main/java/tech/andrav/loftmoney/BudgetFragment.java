@@ -1,12 +1,15 @@
 package tech.andrav.loftmoney;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,7 +141,8 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
                 @Override
                 public void onResponse(Call<Status> call, Response<Status> response) {
                     if (response.body().getStatus().equals("success")) {
-                        mAdapter.addItem(new Item(name, realPrice));
+                        //mAdapter.addItem(new Item(name, realPrice));
+                        loadItems();
                     }
 
                 }
@@ -178,12 +182,52 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
 
     @Override
     public boolean onPrepareActionMode(final ActionMode mode, final Menu menu) {
+        MenuInflater menuInflater = new MenuInflater(getActivity());
+        menuInflater.inflate(R.menu.menu_delete, menu);
         return true;
     }
 
     @Override
     public boolean onActionItemClicked(final ActionMode mode, final MenuItem item) {
+        if (item.getItemId() == R.id.remove) {
+            new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.confirmation)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            removeItems();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
+        }
         return true;
+    }
+
+    private void removeItems() {
+        String token = PreferenceManager.getDefaultSharedPreferences(getContext()).getString(MainActivity.TOKEN, "");
+        List<Integer> selectedItems = mAdapter.getSelectedItemIds();
+        for (Integer itemId : selectedItems) {
+            Call<Status> call = mApi.removeItem(String.valueOf(itemId.intValue()), token);
+            call.enqueue(new Callback<Status>() {
+
+                @Override
+                public void onResponse(Call<Status> call, Response<Status> response) {
+                    loadItems();
+                    mAdapter.clearSelections();
+                }
+
+                @Override
+                public void onFailure(Call<Status> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
     @Override

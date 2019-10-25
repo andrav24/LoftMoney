@@ -19,8 +19,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     private List<Item> mItemsList = new ArrayList<>();
     private Bundle bundle;
     private ItemsAdapterListener mListener;
-
     private SparseBooleanArray mSelectedItems = new SparseBooleanArray();
+
 
     public ItemsAdapter(Bundle bundle) {
 
@@ -49,10 +49,22 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     public int getSelectedSize() {
         int result = 0;
-        for (int i = 0; i < mSelectedItems.size(); i++) {
+        for (int i = 0; i < mItemsList.size(); i++) {
             if (mSelectedItems.get(i)) {
                 result++;
             }
+        }
+        return result;
+    }
+
+    public List<Integer> getSelectedItemIds() {
+        List<Integer> result = new ArrayList<>();
+        int i = 0;
+        for (Item item : mItemsList) {
+            if (mSelectedItems.get(i)) {
+                result.add(item.getId());
+            }
+            i++;
         }
         return result;
     }
