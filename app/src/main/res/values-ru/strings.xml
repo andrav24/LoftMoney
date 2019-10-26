@@ -9,4 +9,7 @@
     <string name="incomes">Доходы</string>
     <string name="activity_main_toolbar_title">Учет Бюджета</string>
     <string name="enter">Войти</string>
+    <string name="selected">Выделено: %1$s</string>
+    <string name="remove">Удалить></string>
+    <string name="confirmation">Вы действительно хотите удалить выбранные пункты?</string>
 </resources>
