@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TabLayout mTabLayout;
     private Toolbar mToolbar;
+    private FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.getTabAt(0).setText(R.string.expences);
         mTabLayout.getTabAt(1).setText(R.string.incomes);
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mFloatingActionButton = findViewById(R.id.fab);
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final int activeFragmentIndex = viewPager.getCurrentItem();
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActionModeStarted(mode);
         mTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_grey_blue));
         mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_grey_blue));
+        mFloatingActionButton.hide();
     }
 
     @Override
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActionModeFinished(mode);
         mTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        mFloatingActionButton.show();
     }
 
     static class BudgetPagerAdapter extends FragmentPagerAdapter {

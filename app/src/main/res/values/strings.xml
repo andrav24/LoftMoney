@@ -11,5 +11,5 @@
     <string name="enter">Enter</string>
     <string name="selected">Selected: %1$s</string>
     <string name="remove">Remove</string>
-    <string name="confirmation">Do you really want to delete selected items?</string>
+    <string name="confirmation">Are you really want to delete selected items?</string>
 </resources>

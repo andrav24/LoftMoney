@@ -196,6 +196,7 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             removeItems();
+                            mActionMode.finish();
                         }
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -207,6 +208,12 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
                     .show();
         }
         return true;
+    }
+
+    @Override
+    public void onDestroyActionMode(final ActionMode mode) {
+        mActionMode = null;
+        mAdapter.clearSelections();
     }
 
     private void removeItems() {
@@ -228,11 +235,5 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
                 }
             });
         }
-    }
-
-    @Override
-    public void onDestroyActionMode(final ActionMode mode) {
-        mActionMode = null;
-        mAdapter.clearSelections();
     }
 }
