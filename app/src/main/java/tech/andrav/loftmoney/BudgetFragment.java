@@ -57,7 +57,10 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull final LayoutInflater inflater,
+            @Nullable final ViewGroup container,
+            @Nullable final Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_budget, null);
 

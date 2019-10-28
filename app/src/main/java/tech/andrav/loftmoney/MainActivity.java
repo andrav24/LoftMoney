@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar);
         mTabLayout = findViewById(R.id.tabs);
         final ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(new BudgetPagerAdapter(
                 getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(viewPager);
         mTabLayout.getTabAt(0).setText(R.string.expences);
         mTabLayout.getTabAt(1).setText(R.string.incomes);
+        mTabLayout.getTabAt(2).setText(R.string.balance);
 
         mFloatingActionButton = findViewById(R.id.fab);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -109,20 +111,22 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     bundle.putInt(COLOR_ID, R.color.dark_sky_blue);
                     bundle.putString(TYPE, EXPENSE);
-                    break;
+                    return BudgetFragment.newInstance(bundle);
                 case 1:
                     bundle.putInt(COLOR_ID, R.color.apple_green);
                     bundle.putString(TYPE, INCOME);
-                    break;
+                    return BudgetFragment.newInstance(bundle);
+                case 2:
+                    return BalanceFragment.newInstance();
                 default:
                     return null;
             }
-            return BudgetFragment.newInstance(bundle);
+
         }
 
         @Override
         public int getCount() {
-            return 2;   // return number of tabs
+            return 3;   // return number of tabs
         }
     }
 }
