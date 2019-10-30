@@ -38,6 +38,19 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
     private ActionMode mActionMode;
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
+    }
+
+    public ActionMode getActionMode() {
+        return mActionMode;
+    }
+
+
     public static BudgetFragment newInstance(Bundle args) {
         BudgetFragment fragment = new BudgetFragment();
         fragment.setArguments(args);
@@ -57,7 +70,10 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull final LayoutInflater inflater,
+            @Nullable final ViewGroup container,
+            @Nullable final Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_budget, null);
 
@@ -68,6 +84,7 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
                 DividerItemDecoration.VERTICAL));
 
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setBackgroundResource(getArguments().getInt(MainActivity.BACKGROUND_ID, R.color.white));
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -99,6 +116,7 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
                 for (Item item : items) {
                     mAdapter.addItem(item);
                 }
+                ((MainActivity) getActivity()).loadBalance();
             }
 
             @Override
@@ -111,8 +129,6 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
 
         if (requestCode == MainActivity.LOFT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 
@@ -158,8 +174,13 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
     @Override
     public void onItemClick(Item item, int position) {
         mAdapter.clearItem(position);
+        int selectedSize = mAdapter.getSelectedSize();
         if (mActionMode != null) {
-            mActionMode.setTitle(getString(R.string.selected, String.valueOf(mAdapter.getSelectedSize())));
+            if (selectedSize > 0) {
+                mActionMode.setTitle(getString(R.string.selected, String.valueOf(selectedSize)));
+            } else {
+                mActionMode.finish();
+            }
         }
     }
 
@@ -227,6 +248,7 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
                 public void onResponse(Call<Status> call, Response<Status> response) {
                     loadItems();
                     mAdapter.clearSelections();
+                    ((MainActivity) getActivity()).loadBalance();
                 }
 
                 @Override
