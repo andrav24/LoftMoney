@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,6 +26,8 @@ public class BalanceFragment extends Fragment {
     private TextView mTotalFinance;
     private TextView mMyExpences;
     private TextView mMyIncome;
+    private DiagramView mDiagramView;
+
 
     public static Fragment newInstance() {
         return new BalanceFragment();
@@ -46,6 +51,7 @@ public class BalanceFragment extends Fragment {
         mTotalFinance = view.findViewById(R.id.total_finance);
         mMyExpences = view.findViewById(R.id.my_expences);
         mMyIncome = view.findViewById(R.id.my_income);
+        mDiagramView = view.findViewById(R.id.diagram_view);
         loadBalance();
         return view ;
     }
@@ -56,9 +62,14 @@ public class BalanceFragment extends Fragment {
         responceCall.enqueue(new Callback<BalanceResponce>() {
             @Override
             public void onResponse(Call<BalanceResponce> call, Response<BalanceResponce> response) {
-                mMyExpences.setText(String.valueOf(response.body().getTotalExpences()));
-                mMyIncome.setText(String.valueOf(response.body().getTotalIncome()));
-                mTotalFinance.setText(String.valueOf(response.body().getTotalIncome() - response.body().getTotalExpences()));
+
+                float expences = response.body().getTotalExpences();
+                float income = response.body().getTotalIncome();
+
+                mMyExpences.setText(String.format(Locale.ROOT,"%.2f", expences));
+                mMyIncome.setText(String.format(Locale.ROOT,"%.2f", income));
+                mTotalFinance.setText(String.format(Locale.ROOT,"%.2f", income - expences));
+                mDiagramView.update(expences, income);
             }
 
             @Override

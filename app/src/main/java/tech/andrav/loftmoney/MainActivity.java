@@ -1,6 +1,7 @@
 package tech.andrav.loftmoney;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -21,13 +22,13 @@ import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
-
     public static final int LOFT_REQUEST_CODE = 100;
     public static final String COLOR_ID = "colorId";
     public static final String TYPE = "fragmentType";
     public static final String EXPENSE = "expense";
     public static final String INCOME = "income";
     public static final String TOKEN = "token";
+    public static final String BACKGROUND_ID = "backgroundId";
 
     private TabLayout mTabLayout;
     private Toolbar mToolbar;
@@ -47,6 +48,47 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(new BudgetPagerAdapter(
                 getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
+
+        /*
+            метод вызывается при смене страниц View Pager
+         */
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                /*
+                switch (position) {
+                    case 0:
+                    case 1:
+                        mFloatingActionButton.show();
+                        BudgetFragment activeFragment = (BudgetFragment) getSupportFragmentManager().getFragments().get(position);
+                        ActionMode actionMode = ((BudgetFragment) getSupportFragmentManager().getFragments().get(position)).getActionMode();
+                        if (actionMode != null) {
+                            actionMode.finish();
+                        }
+                        break;
+                    case 2:
+                        mFloatingActionButton.hide();
+                        break;
+                }
+
+                 */
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 2) {
+                    mFloatingActionButton.hide();
+                } else {
+                    mFloatingActionButton.show();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
         mTabLayout.setupWithViewPager(viewPager);
         mTabLayout.getTabAt(0).setText(R.string.expences);
@@ -81,6 +123,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void loadBalance() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof BalanceFragment) {
+                ((BalanceFragment)fragment).loadBalance();
+            }
+        }
+    }
+
     @Override
     public void onActionModeStarted(ActionMode mode) {
         super.onActionModeStarted(mode);
@@ -111,10 +161,12 @@ public class MainActivity extends AppCompatActivity {
                 case 0:
                     bundle.putInt(COLOR_ID, R.color.dark_sky_blue);
                     bundle.putString(TYPE, EXPENSE);
+                    bundle.putInt(BACKGROUND_ID, R.drawable.expense_tab_background);
                     return BudgetFragment.newInstance(bundle);
                 case 1:
                     bundle.putInt(COLOR_ID, R.color.apple_green);
                     bundle.putString(TYPE, INCOME);
+                    bundle.putInt(BACKGROUND_ID, R.drawable.income_tab_background);
                     return BudgetFragment.newInstance(bundle);
                 case 2:
                     return BalanceFragment.newInstance();
