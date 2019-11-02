@@ -10,12 +10,64 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    signingConfigs {
         release {
-            minifyEnabled false
+            storeFile file('release.keystore')
+            storePassword '123456'
+            keyAlias 'aantonov'
+            keyPassword '123456'
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    buildTypes {
+
+        debug {
+            buildConfigField("String", "URL", "\"https://loftschool.com/android-api/basic/v1/\"")
+            resValue("string", "app_name", "loftmoney-debug")
+        }
+
+        release {
+            signingConfig signingConfigs.release
+            buildConfigField("String", "URL", "\"https://loftschool.com/android-api/basic/v1/\"")
+            resValue("string", "app_name", "LoftMoney")
+
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions 'target'
+
+    productFlavors {
+        mobile {
+            applicationId "ru.loftmoney.test"
+            resValue("color", "colorPrimary", "#3574fa")
+            resValue("color", "colorPrimaryDark", "#2056C9")
+            resValue("color", "colorAccent", "#ffc107")
+        }
+
+        beta {
+            resValue("string", "app_name", "loftmoney-beta")
+            resValue("color", "colorPrimary", "#3574fa")
+            resValue("color", "colorPrimaryDark", "#2056C9")
+            resValue("color", "colorAccent", "#ffc107")
+            applicationIdSuffix ".beta"
+        }
+
+        otherColors {
+            applicationIdSuffix ".otherColors"
+            resValue("color", "colorPrimary", "#43a047")
+            resValue("color", "colorPrimaryDark", "#43a047")
+            resValue("color", "colorAccent", "#c0ca33")
+        }
+    }
+
 }
 
 dependencies {
