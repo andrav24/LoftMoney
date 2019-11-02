@@ -85,10 +85,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                ActionMode actionMode;
+                final int position = viewPager.getCurrentItem();
+                Fragment fragment = getSupportFragmentManager().getFragments().get(position);
+                if (fragment instanceof BudgetFragment) {
+                    actionMode = ((BudgetFragment)fragment).getActionMode();
+                } else {
+                    actionMode = null;
+                }
+                switch (state) {
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        if (null != actionMode) actionMode.finish();
+                        break;
+                }
             }
         });
-
 
         mTabLayout.setupWithViewPager(viewPager);
         mTabLayout.getTabAt(0).setText(R.string.expences);

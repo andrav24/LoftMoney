@@ -1,7 +1,9 @@
 package tech.andrav.loftmoney;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -20,22 +22,22 @@ public class DiagramView extends View {
 
     public DiagramView(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     public DiagramView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
     public DiagramView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
 
     public DiagramView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(attrs);
     }
 
 
@@ -94,8 +96,21 @@ public class DiagramView extends View {
     /*
         custom method
      */
-    private void init() {
+    private void init(@Nullable AttributeSet attrs) {
+
+        /*
+            Depricated
         mExpencePaint.setColor(ContextCompat.getColor(getContext(), R.color.dark_sky_blue));
         mIncomePaint.setColor(ContextCompat.getColor(getContext(), R.color.apple_green));
+         */
+
+        if (attrs == null) {
+            return;
+        }
+
+        TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.DiagramView);
+        mExpencePaint.setColor(ta.getColor(R.styleable.DiagramView_expenseColor, getResources().getColor(R.color.dark_sky_blue)));
+        mIncomePaint.setColor(ta.getColor(R.styleable.DiagramView_incomeColor, getResources().getColor(R.color.apple_green)));
+        ta.recycle();
     }
 }
