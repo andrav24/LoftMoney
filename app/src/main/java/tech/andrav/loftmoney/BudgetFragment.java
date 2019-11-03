@@ -38,14 +38,6 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
     private ActionMode mActionMode;
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mActionMode != null) {
-            mActionMode.finish();
-        }
-    }
-
     public ActionMode getActionMode() {
         return mActionMode;
     }
